@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: retrieve-pods
+spec:
+  template:
+    spec:
+      containers:
+      - name: curl-container
+        image: curlimages/curl
+        command: ["curl"]
+        args: ["-X", "GET", "https://kubernetes.default.svc/api/v1/namespaces/default/pods", "--header", "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)"]
+      restartPolicy: Never
+      serviceAccountName: default
+
